@@ -7,7 +7,10 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 ip = sys.argv[1]
-
+second_command = sys.argv[2] if len(sys.argv) > 2 else None
+third_command = sys.argv[3] if len(sys.argv) > 3 else None
+start_port = 0
+end_port = 1024
 
 def tcp(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
@@ -19,10 +22,10 @@ def tcp(port):
                 print(f"Port is open {port} : {banner}")
             except socket.timeout:
                 print(f"Port is open {port}")
-        
 
-
+if second_command == "-p-" or third_command == "-p-":
+     end_port = 65535
 
 with ThreadPoolExecutor(max_workers=100) as executor:
-    executor.map(tcp, range(0, 1024))
+           executor.map(tcp, range(start_port, end_port))
     
