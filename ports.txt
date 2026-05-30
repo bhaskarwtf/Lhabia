@@ -1,0 +1,26 @@
+Generated this from gemini to make banner grabber of all these port
+# --- WEB & ENCRYPTED SERVICES ---
+80   | HTTP       | Active  | Send: "HEAD / HTTP/1.1\r\nHost: <ip>\r\n\r\n" -> Parse "Server:" header
+8080 | HTTP-Alt   | Active  | Send: "HEAD / HTTP/1.1\r\nHost: <ip>\r\n\r\n" -> Parse "Server:" header
+443  | HTTPS      | Active  | Action: Wrap socket in TLS/SSL context -> Send HTTP HEAD request
+8443 | HTTPS-Alt  | Active  | Action: Wrap socket in TLS/SSL context -> Send HTTP HEAD request
+22   | SSH        | Passive | Action: Immediate read on connect before timeout -> Parse banner string
+
+# --- DATABASE & CACHING SERVICES ---
+3306  | MySQL      | Passive | Action: Immediate read -> Skip first 5 binary bytes to parse text version
+5432  | PostgreSQL | Active  | Send Hex: \x00\x00\x00\x08\x04\xd2\x16\x2f -> Check for SSL 'S' or 'N' response
+6379  | Redis      | Active  | Send: "INFO\r\n" -> Parse line starting with "redis_version:"
+11211 | Memcached  | Active  | Send: "stats\r\n" -> Parse line containing "STAT version"
+
+# --- INFRASTRUCTURE & MAIL SERVICES ---
+21  | FTP        | Passive | Action: Immediate read -> Parses greeting string (e.g., "220 vsFTPd")
+25  | SMTP       | Active  | Send: "EHLO scanner.local\r\n" -> Parse response text block
+53  | DNS (TCP)  | Active  | Action: Send binary TXT query packet for "version.bind" in CHAOS net class
+143 | IMAP       | Active  | Send: "A1 CAPABILITY\r\n" -> Parse capability layout for server software
+161 | SNMP (UDP) | Active  | Action: Send SNMP GetRequest packet with community string (e.g., "public") for OID 1.3.6.1.2.1.1.1.0
+
+# --- WINDOWS & ENTERPRISE SERVICES ---
+135  | RPC        | Active  | Action: Send binary RPC Bind request UUID 11111111-2222-3333-4444-555555555555
+445  | SMB        | Active  | Action: Send binary SMB Negotiate Protocol Request packet (\xffSMB7...) -> Parse OS build
+389  | LDAP       | Active  | Action: Send binary LDAP BindRequest packet (anonymous or authenticated)
+3389 | RDP        | Active  | Send Hex: \x03\x00\x00\x13\x0e\xe0\x00\x00\x00\x00\x00\xc0\x01\n\x01\x00\x08\x00\x03\x00\x00\x00 -> Verify connection confirm packet
