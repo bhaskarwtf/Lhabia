@@ -1,0 +1,57 @@
+Lhabia v1.0
+Fast Network Recon Scanner
+
+USAGE:
+    lhabia <target> [OPTIONS]
+
+TARGET:
+    lhabia 192.168.1.1
+    lhabia scanme.nmap.org
+
+SCAN MODES:
+    --quick             Scan top 1000 ports
+    --full              Scan all 65535 ports
+    --syn               TCP SYN scan
+    --connect           TCP Connect scan
+    --udp               UDP scan
+    --banner            Banner grabbing
+    --service           Service detection
+
+PORT OPTIONS:
+    --ports 80,443,8080
+    --range 1-1024
+    --top 100
+    --top 1000
+
+OUTPUT:
+    --save results.txt
+    --json results.json
+    --silent
+    --verbose
+
+PERFORMANCE:
+    --threads 100
+    --timeout 0.5
+    --aggressive
+    --stealth
+
+DISCOVERY:
+    --ping
+    --host-discovery
+    --skip-discovery
+
+ENUMERATION:
+    --http-info
+    --ssh-info
+    --ftp-info
+
+MISC:
+    --version
+    --help
+
+EXAMPLES:
+    lhabia 192.168.1.10 --quick
+    lhabia 192.168.1.10 --full
+    lhabia 192.168.1.10 --syn --banner
+    lhabia 192.168.1.10 --range 20-1000
+    lhabia 192.168.1.10 --save report.txt
