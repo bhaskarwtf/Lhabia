@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import socket
 import sys
+from core.banner import main
 
 if len(sys.argv) != 2:
     print(f"Usage: python {sys.argv[0]} <target_ip>")
@@ -17,11 +18,7 @@ def tcp(port):
         server.settimeout(0.5)
         rel = server.connect_ex((ip, port))
         if rel == 0:
-            try:
-                banner = server.recv(1024).decode().strip()
-                print(f"Port is open {port} : {banner}")
-            except socket.timeout:
-                print(f"Port is open {port}")
+                print(f"Port is open {port}: {main(banner)}")
 
 if second_command == "-p-" or third_command == "-p-":
      end_port = 65535
