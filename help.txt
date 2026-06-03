@@ -1,57 +1,81 @@
-Lhabia v1.0
-Fast Network Recon Scanner
+╔══════════════════════════════════════════════╗
+║                LHABIA v2.0                  ║
+║         Intelligent Recon Framework         ║
+╚══════════════════════════════════════════════╝
 
 USAGE:
-    lhabia <target> [OPTIONS]
+    lhabia <target> [options]
 
-TARGET:
-    lhabia 192.168.1.1
-    lhabia scanme.nmap.org
+TARGETS:
+    IP Address
+    Domain Name
+    CIDR Range
 
-SCAN MODES:
-    --quick             Scan top 1000 ports
-    --full              Scan all 65535 ports
-    --syn               TCP SYN scan
-    --connect           TCP Connect scan
-    --udp               UDP scan
-    --banner            Banner grabbing
-    --service           Service detection
+SCAN PROFILES:
+    -q              Quick Scan
+    -F              Full Scan
+    -R              Recon Mode
+    -WEB            Web Audit
+    -ALL            Complete Assessment
 
-PORT OPTIONS:
-    --ports 80,443,8080
-    --range 1-1024
-    --top 100
-    --top 1000
+SCAN TECHNIQUES:
+    -sS             SYN Scan
+    -sT             TCP Connect
+    -sU             UDP Scan
+    -sV             Service Detection
+    -sB             Banner Grab
 
-OUTPUT:
-    --save results.txt
-    --json results.json
-    --silent
-    --verbose
+PORTS:
+    -p <ports>      Specific Ports
+    -r <range>      Port Range
+    -t100           Top 100 Ports
+    -t1000          Top 1000 Ports
+
+HOST DISCOVERY:
+    -P              Ping Scan
+    -HD             Host Discovery
+    -PN             Skip Discovery
+
+WEB ENUMERATION:
+    --web           Web Fingerprint
+    --tls           SSL/TLS Analysis
+    --headers       Security Headers
+    --tech          Technology Detection
+
+NETWORK ENUMERATION:
+    --dns           DNS Enumeration
+    --whois         WHOIS Lookup
+    --geo           GeoIP Lookup
+    --trace         Traceroute
+    --os            OS Detection
+
+REPORTING:
+    -o <file>       Save Text Report
+    -O <file>       Save JSON Report
+    --html          Generate HTML Report
 
 PERFORMANCE:
-    --threads 100
-    --timeout 0.5
-    --aggressive
-    --stealth
+    -T <threads>    Thread Count
+    -W <timeout>    Connection Timeout
 
-DISCOVERY:
-    --ping
-    --host-discovery
-    --skip-discovery
+OUTPUT:
+    -v              Verbose
+    -z              Silent
 
-ENUMERATION:
-    --http-info
-    --ssh-info
-    --ftp-info
-
-MISC:
-    --version
-    --help
+INFORMATION:
+    -h              Help
+    -V              Version
 
 EXAMPLES:
-    lhabia 192.168.1.10 --quick
-    lhabia 192.168.1.10 --full
-    lhabia 192.168.1.10 --syn --banner
-    lhabia 192.168.1.10 --range 20-1000
-    lhabia 192.168.1.10 --save report.txt
+
+    lhabia 192.168.1.1 -q
+
+    lhabia scanme.nmap.org -R
+
+    lhabia target.com -WEB
+
+    lhabia target.com -F -sV --html
+
+    lhabia target.com --dns --whois
+
+    lhabia 10.10.10.10 -ALL
