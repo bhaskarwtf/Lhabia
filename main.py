@@ -8,7 +8,7 @@ from scanners.syn import SynScanner
 args = parse_arguments()
 ip = args.ip
 scan_type = "-sT" if args.tcp_connect else "-sS" if args.syn_scan else "-sV" if args.version_detection else None
-scan_all_ports = args.p == "1-65535"
+scan_all_ports = args.full_scan
 
 
 start_port = 1
@@ -37,8 +37,6 @@ def syn_scan(port):
     
     if result == "Open":
         print(f"[SYN] Port {port} open")
-    elif result == "Closed":
-        print(f"[SYN] Port {port} closed")
     elif result == "Filtered":
         print(f"[SYN] Port {port} filtered")
 
@@ -47,7 +45,7 @@ if __name__ == "__main__":
 
     print(f"Scanning {ip} from {start_port} to {end_port}")
 
-    with ThreadPoolExecutor(max_workers=100) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
 
         if scan_type == "-sT":
             executor.map(tcp_scan, range(start_port, end_port + 1))

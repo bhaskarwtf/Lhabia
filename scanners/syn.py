@@ -1,5 +1,8 @@
-from scapy.all import IP, TCP, sr, send
+from scapy.all import IP, TCP, sr1, send
 import random
+import logging
+
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
 class SynScanner:
 
@@ -11,31 +14,32 @@ class SynScanner:
         packet = IP(dst=ip) / TCP(
             sport=src_port,
             dport=port,
-            flags='S',
+            flags="S",
             seq=random.randint(0, 4294967295)
         )
 
-        
-        response = sr(packet, timeout=2, verbose=0)
-        if not response:
-            return "Filtered"  
+        response = sr1(packet, timeout=4, retry=1, verbose=0)
 
+        if response is None:
+            return "Filtered"
 
-            # SYN-ACK
-        if flags == 0x12:
+        if response.haslayer(TCP):
+
+            flags = response[TCP].flags
+
+            if flags == 0x12:
 
                 rst_packet = IP(dst=ip) / TCP(
                     sport=src_port,
                     dport=port,
-                    flags='R'
+                    flags="R",
+                    seq=response[TCP].ack
                 )
 
                 send(rst_packet, verbose=0)
 
                 return "Open"
-
-            # RST-ACK
-        elif flags == 0x14:
-                return "Closed"
+            elif flags == 0x14:
+                return None 
 
         return "Unknown"
