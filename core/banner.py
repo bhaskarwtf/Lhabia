@@ -15,7 +15,9 @@ def grab_banner(connected_socket, ip, port):
     if port in [443, 8443]:
         return https_grabber(ip, port)
     if port in [3306, 5432, 1433]:
-        return sql_grabber(ip, port)
+        return my_sql_grabber(ip, port)
+    if port in [5432]:
+        return postgre_sql_grabber(ip, port)
 
     return "TCP open (No banner received)"
 
@@ -63,7 +65,7 @@ def https_grabber(ip, port):
     except Exception:
         return "HTTPS open (Request failed)"
     
-def sql_grabber(ip, port):
+def my_sql_grabber(ip, port):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sql_sock:
             sql_sock.settimeout(1.5)
@@ -80,4 +82,25 @@ def sql_grabber(ip, port):
                 return "SQL open (No response)"
     except Exception:
         return "SQL open (Request failed)"  
+
+def postgre_sql_grabber(ip, port):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sql_sock:
+            sql_sock.settimeout(1.5)
+            sql_sock.connect((ip, port))
+
+            sql_request = b"\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00"
+            sql_sock.sendall(sql_request)
+
+            response = sql_sock.recv(2048).decode(errors='ignore')
+
+            if response:
+                return f"PostgreSQL Service: {response.strip()}"
+            else:
+                return "PostgreSQL open (No response)"
+    except Exception:
+        return "PostgreSQL open (Request failed)"
+
+
+
     
