@@ -9,7 +9,7 @@ args = parse_arguments()
 ip = args.ip
 scan_type = "-sT" if args.tcp_connect else "-sS" if args.syn_scan else "-sV" if args.version_detection else None
 scan_all_ports = args.full_scan
-
+workers = 10 if scan_type == "-sS" else 100
 
 start_port = 1
 end_port = 65535 if scan_all_ports else 1024
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     print(f"Scanning {ip} from {start_port} to {end_port}")
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=workers) as executor:
 
         if scan_type == "-sT":
             executor.map(tcp_scan, range(start_port, end_port + 1))
