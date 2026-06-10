@@ -101,6 +101,22 @@ def postgre_sql_grabber(ip, port):
     except Exception:
         return "PostgreSQL open (Request failed)"
 
+def redis_grabber(ip, port):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as redis_sock:
+            redis_sock.settimeout(1.5)
+            redis_sock.connect((ip, port))
 
+            redis_request = b"*1\r\n$4\r\nINFO\r\n"
+            redis_sock.sendall(redis_request)
+
+            response = redis_sock.recv(2048).decode(errors='ignore')
+
+            if response:
+                return f"Redis Service: {response.strip()}"
+            else:
+                return "Redis open (No response)"
+    except Exception:
+        return "Redis open (Request failed)"
 
     
