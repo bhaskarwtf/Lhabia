@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import socket
 
 from core.argprase import parse_arguments
-from core.banner import grab_banner
+from scanners.banner import grab_banner
 from scanners.syn import SynScanner
 
 args = parse_arguments()
