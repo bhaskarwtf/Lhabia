@@ -49,15 +49,6 @@ if __name__ == "__main__":
 
         if scan_type == "-sT":
             executor.map(tcp_scan, range(start_port, end_port + 1))
-        
-        elif scan_type == "-sS":
-            scanner = SynScanner(
-            target_ip=ip,
-            ports=range(start_port, end_port + 1),
-            timeout=3,
-            rate=500
-            )
-            scanner.scan()
     
         elif scan_type == "-sV":
             executor.map(tcp_scan,range(start_port,end_port +1))
